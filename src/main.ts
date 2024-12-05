@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -21,6 +22,18 @@ async function bootstrap() {
   app.enableCors({
     origin: '*',
   });
+  app.use(
+    bodyParser.json({
+      limit: '50mb',
+    }),
+  );
+  app.use(
+    bodyParser.urlencoded({
+      limit: '50mb',
+      extended: true,
+    }),
+  );
+
   await app.listen(configService.get('PORT'));
 }
 bootstrap();
