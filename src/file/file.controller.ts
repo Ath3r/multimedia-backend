@@ -154,7 +154,7 @@ export class FileController {
   @Public()
   @Get(':id/view')
   @HttpCode(HttpStatus.OK)
-  async serveFile(@Param('id') id: string, @Res() res: any) {
+  async serveFile(@Param('id') id: string) {
     const file = await this.fileService.findOne(id);
     if (!file) {
       throw new NotFoundException('File not found');
@@ -166,6 +166,10 @@ export class FileController {
       throw new NotFoundException('File not found on disk');
     }
 
-    return res?.redirect(`/file/${file.userId}/${file.name}`);
+    const fileStream = createReadStream(filePath);
+    return new StreamableFile(fileStream, {
+      type: file.mimeType || 'application/octet-stream',
+      disposition: `inline; filename="${file.name}"`,
+    });
   }
 }
