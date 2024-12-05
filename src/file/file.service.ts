@@ -12,11 +12,13 @@ export class FileService {
     url,
     userId,
     tags = [],
+    mimeType,
   }: {
     file: any;
     url: string;
     userId: string;
     tags?: string[];
+    mimeType?: string;
   }) {
     // Ensure the files directory exists
     const uploadDir = join(process.cwd(), 'file');
@@ -30,6 +32,7 @@ export class FileService {
         url, // Update URL format to match static serving path
         userId,
         tags,
+        mimeType,
       },
     });
   }

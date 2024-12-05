@@ -86,6 +86,7 @@ export class FileController {
       },
       url,
       userId,
+      mimeType: file.mimetype,
       tags: tags.split(','),
     });
   }
@@ -167,7 +168,7 @@ export class FileController {
 
     const fileStream = createReadStream(filePath);
     return new StreamableFile(fileStream, {
-      type: 'application/octet-stream',
+      type: file.mimeType || 'application/octet-stream',
       disposition: `inline; filename="${file.name}"`,
     });
   }
